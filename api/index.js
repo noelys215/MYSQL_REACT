@@ -16,4 +16,4 @@ app.use('/api/posts', postRoutes);
 app.use('/api/comments', commentsRoutes);
 app.use('/api/likes', likesRoutes);
 
-app.listen(8000, () => console.log('API Running'));
+app.listen(8800, () => console.log('API Running'));
