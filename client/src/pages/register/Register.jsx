@@ -4,13 +4,13 @@ import { useState } from 'react';
 import axios from 'axios';
 
 const Register = () => {
+	const [err, setErr] = useState(null);
 	const [inputs, setInputs] = useState({
 		username: '',
 		email: '',
 		password: '',
 		name: '',
 	});
-	const [err, setErr] = useState(null);
 
 	const handleClick = async (e) => {
 		e.preventDefault();
@@ -19,7 +19,6 @@ const Register = () => {
 			await axios.post('http://localhost:8800/api/auth/register', inputs);
 		} catch (err) {
 			setErr(err.response.data);
-			console.log(err);
 		}
 	};
 
