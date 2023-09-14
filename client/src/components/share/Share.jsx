@@ -12,9 +12,20 @@ const Share = () => {
 	const [desc, setDesc] = useState('');
 	const { currentUser } = useContext(AuthContext);
 
+	//
+	const upload = async () => {
+		try {
+			const formData = new FormData();
+			formData.append('file', file);
+			const res = await makeRequest.post('/upload', formData);
+			return res.data;
+		} catch (err) {
+			console.log(err);
+		}
+	};
+
 	// RTK
 	const queryClient = useQueryClient();
-
 	const mutation = useMutation(
 		(newPost) => {
 			return makeRequest.post('/posts', newPost);
@@ -25,10 +36,11 @@ const Share = () => {
 			},
 		}
 	);
-
+	// Handlers
 	const handleClick = async (e) => {
 		e.preventDefault();
 		let imgUrl = '';
+		if (file) imgUrl = await upload();
 		mutation.mutate({ desc, img: imgUrl });
 		setDesc('');
 		setFile(null);
@@ -38,13 +50,18 @@ const Share = () => {
 		<div className="share">
 			<div className="container">
 				<div className="top">
-					<img src={currentUser.profilePic} alt="" />
-					<input
-						type="text"
-						placeholder={`What's on your mind ${currentUser.name}?`}
-						onChange={(e) => setDesc(e.target.value)}
-						value={desc}
-					/>
+					<div className="left">
+						<img src={'/upload/' + currentUser.profilePic} alt="" />
+						<input
+							type="text"
+							placeholder={`What's on your mind ${currentUser.name}?`}
+							onChange={(e) => setDesc(e.target.value)}
+							value={desc}
+						/>
+					</div>
+					<div className="right">
+						{file && <img className="file" alt="" src={URL.createObjectURL(file)} />}
+					</div>
 				</div>
 				<hr />
 				<div className="bottom">
