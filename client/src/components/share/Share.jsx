@@ -4,15 +4,35 @@ import Map from '../../assets/map.png';
 import Friend from '../../assets/friend.png';
 import { useContext, useState } from 'react';
 import { AuthContext } from '../../context/authContext';
-// import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { makeRequest } from '../../axios';
 
 const Share = () => {
 	const [file, setFile] = useState(null);
 	const [desc, setDesc] = useState('');
-
 	const { currentUser } = useContext(AuthContext);
 
-	const handleClick = async (e) => console.log(file);
+	// RTK
+	const queryClient = useQueryClient();
+
+	const mutation = useMutation(
+		(newPost) => {
+			return makeRequest.post('/posts', newPost);
+		},
+		{
+			onSuccess: () => {
+				queryClient.invalidateQueries(['posts']);
+			},
+		}
+	);
+
+	const handleClick = async (e) => {
+		e.preventDefault();
+		let imgUrl = '';
+		mutation.mutate({ desc, img: imgUrl });
+		setDesc('');
+		setFile(null);
+	};
 
 	return (
 		<div className="share">
