@@ -23,9 +23,7 @@ const Comments = ({ postId }) => {
 			return makeRequest.post('/comments', newComment);
 		},
 		{
-			onSuccess: () => {
-				queryClient.invalidateQueries(['comments']);
-			},
+			onSuccess: () => queryClient.invalidateQueries(['comments']),
 		}
 	);
 
