@@ -23,7 +23,9 @@ const Post = ({ post }) => {
 		})
 	);
 
-	const handleLike = () => {};
+	const handleLike = () => {
+		console.log(error);
+	};
 
 	return (
 		<div className="post">
