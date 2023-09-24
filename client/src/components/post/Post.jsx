@@ -15,22 +15,52 @@ import { AuthContext } from '../../context/authContext';
 
 const Post = ({ post }) => {
 	const [commentOpen, setCommentOpen] = useState(false);
+	const [menuOpen, setMenuOpen] = useState(false);
 	const { currentUser } = useContext(AuthContext);
 
 	const { isLoading, error, data } = useQuery(['likes', post.id], () =>
-		makeRequest.get('/likes?postId=' + post.id).then((res) => {
-			return res.data;
-		})
+		makeRequest.get('/likes?postId=' + post.id).then((res) => res.data)
 	);
 
-	const handleLike = () => {};
+	if (error) console.log(error);
+
+	const queryClient = useQueryClient();
+
+	const mutation = useMutation(
+		(liked) => {
+			if (liked) return makeRequest.delete('/likes?postId=' + post.id);
+			return makeRequest.post('/likes', { postId: post.id });
+		},
+		{
+			onSuccess: () => {
+				// Invalidate and refetch
+				queryClient.invalidateQueries(['likes']);
+			},
+		}
+	);
+
+	const deleteMutation = useMutation(
+		(postId) => {
+			return makeRequest.delete('/posts/' + postId);
+		},
+		{
+			onSuccess: () => {
+				// Invalidate and refetch
+				queryClient.invalidateQueries(['posts']);
+			},
+		}
+	);
+
+	const handleLike = () => mutation.mutate(data.includes(currentUser.id));
+
+	const handleDelete = () => deleteMutation.mutate(post.id);
 
 	return (
 		<div className="post">
 			<div className="container">
 				<div className="user">
 					<div className="userInfo">
-						<img src={post.profilePic} alt="" />
+						<img src={'/upload/' + post.profilePic} alt="" />
 						<div className="details">
 							<Link
 								to={`/profile/${post.userId}`}
@@ -40,7 +70,10 @@ const Post = ({ post }) => {
 							<span className="date">{moment(post.createdAt).fromNow()}</span>
 						</div>
 					</div>
-					<MoreHorizIcon />
+					<MoreHorizIcon onClick={() => setMenuOpen(!menuOpen)} />
+					{menuOpen && post.userId === currentUser.id && (
+						<button onClick={handleDelete}>delete</button>
+					)}
 				</div>
 				<div className="content">
 					<p>{post.desc}</p>
@@ -59,7 +92,7 @@ const Post = ({ post }) => {
 					</div>
 					<div className="item" onClick={() => setCommentOpen(!commentOpen)}>
 						<TextsmsOutlinedIcon />
-						12 Comments
+						See Comments
 					</div>
 					<div className="item">
 						<ShareOutlinedIcon />
