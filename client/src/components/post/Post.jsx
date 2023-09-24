@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import Comments from '../comments/Comments';
 import { useState } from 'react';
 import moment from 'moment';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 import { makeRequest } from '../../axios';
 import { useContext } from 'react';
 import { AuthContext } from '../../context/authContext';
@@ -23,9 +23,7 @@ const Post = ({ post }) => {
 		})
 	);
 
-	const handleLike = () => {
-		console.log(error);
-	};
+	const handleLike = () => {};
 
 	return (
 		<div className="post">
