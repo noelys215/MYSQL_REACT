@@ -9,11 +9,13 @@ import LanguageIcon from '@mui/icons-material/Language';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Posts from '../../components/posts/Posts';
+import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 import { makeRequest } from '../../axios';
-import { useContext, useState } from 'react';
-import { AuthContext } from '../../context/authContext';
 import { useLocation } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useContext } from 'react';
+import { AuthContext } from '../../context/authContext';
+import Update from '../../components/update/Update';
+import { useState } from 'react';
 
 const Profile = () => {
 	const [openUpdate, setOpenUpdate] = useState(false);
