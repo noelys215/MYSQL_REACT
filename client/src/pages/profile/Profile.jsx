@@ -27,10 +27,25 @@ const Profile = () => {
 		makeRequest.get('/users/find/' + userId).then((res) => res.data)
 	);
 
+	console.log(error);
+
 	const { isLoading: rIsLoading, data: relationshipData } = useQuery(['relationship'], () =>
 		makeRequest.get('/relationships?followedUserId=' + userId).then((res) => res.data)
 	);
-	const handleFollow = () => {};
+
+	const queryClient = useQueryClient();
+
+	const mutation = useMutation(
+		(following) => {
+			if (following) return makeRequest.delete('/relationships?userId=' + userId);
+			return makeRequest.post('/relationships', { userId });
+		},
+		{
+			onSuccess: () => queryClient.invalidateQueries(['relationship']),
+		}
+	);
+
+	const handleFollow = () => mutation.mutate(relationshipData.includes(currentUser.id));
 
 	return (
 		<div className="profile">
