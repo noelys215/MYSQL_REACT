@@ -37,8 +37,6 @@ export const deleteRelationship = (req, res) => {
 
 		const q = 'DELETE FROM relationships WHERE `followerUserId` = ? AND `followedUserId` = ?';
 
-		console.log(token);
-
 		db.query(q, [userInfo.id, req.query.userId], (err, data) => {
 			if (err) return res.status(500).json(err);
 			return res.status(200).json('Unfollow');
