@@ -22,6 +22,25 @@ export const getStories = (req, res) => {
 	});
 };
 
-export const addStory = (req, res) => {};
+export const addStory = (req, res) => {
+	const token = req.cookies.accessToken;
+	if (!token) return res.status(401).json('Not logged in!');
+
+	jwt.verify(token, process.env.JWT_SECRET, (err, userInfo) => {
+		if (err) return res.status(403).json('Token is not valid!');
+
+		const q = 'INSERT INTO stories(`img`, `createdAt`, `userId`) VALUES (?)';
+		const values = [
+			req.body.img,
+			moment(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
+			userInfo.id,
+		];
+
+		db.query(q, [values], (err, data) => {
+			if (err) return res.status(500).json(err);
+			return res.status(200).json('Story has been created.');
+		});
+	});
+};
 
 export const deleteStory = (req, res) => {};
