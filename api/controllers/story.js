@@ -52,6 +52,8 @@ export const deleteStory = (req, res) => {
 
 		const q = 'DELETE FROM stories WHERE `id`=? AND `userId` = ?';
 
+		console.log(q);
+
 		db.query(q, [req.params.id, userInfo.id], (err, data) => {
 			if (err) return res.status(500).json(err);
 			if (data.affectedRows > 0) return res.status(200).json('Story has been deleted.');
