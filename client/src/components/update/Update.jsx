@@ -27,7 +27,11 @@ export const Update = ({ setOpenUpdate, user }) => {
 		}
 	};
 
-	const handleChange = () => {};
+	const handleChange = (e) =>
+		setTexts((prev) => ({ ...prev, [e.target.name]: [e.target.value] }));
+
+	const queryClient = useQueryClient();
+
 	const handleClick = () => {};
 
 	<div className="update">
