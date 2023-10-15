@@ -29,8 +29,15 @@ export const Update = ({ setOpenUpdate, user }) => {
 
 	const handleChange = (e) =>
 		setTexts((prev) => ({ ...prev, [e.target.name]: [e.target.value] }));
-
 	const queryClient = useQueryClient();
+	const mutation = useMutation(
+		(user) => {
+			return makeRequest.put('/users', user);
+		},
+		{
+			onSuccess: () => queryClient.invalidateQueries(['user']),
+		}
+	);
 
 	const handleClick = () => {};
 
