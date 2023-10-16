@@ -39,7 +39,18 @@ export const Update = ({ setOpenUpdate, user }) => {
 		}
 	);
 
-	const handleClick = () => {};
+	const handleClick = async (e) => {
+		e.preventDefault();
+		let coverUrl;
+		let profileUrl;
+		coverUrl = cover ? await upload(cover) : user.coverPic;
+		profileUrl = profile ? await upload(profile) : user.profilePic;
+
+		mutation.mutate({ ...texts, coverPic: coverUrl, profilePic: profileUrl });
+		setOpenUpdate(false);
+		setCover(null);
+		setProfile(null);
+	};
 
 	<div className="update">
 		<div className="wrapper">
