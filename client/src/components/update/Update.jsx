@@ -91,7 +91,7 @@ export const Update = ({ setOpenUpdate, user }) => {
 				<input type="text" name="website" value={''} onChange={handleChange} />
 				<button onClick={handleClick}>Update</button>
 			</form>
-			<button className="close" onClick={() => {}}>
+			<button className="close" onClick={() => setOpenUpdate(false)}>
 				close
 			</button>
 		</div>
