@@ -50,6 +50,8 @@ export const Update = ({ setOpenUpdate, user }) => {
 		setOpenUpdate(false);
 		setCover(null);
 		setProfile(null);
+
+		console.log(coverUrl);
 	};
 
 	<div className="update">
