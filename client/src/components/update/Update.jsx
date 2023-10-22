@@ -27,9 +27,8 @@ const Update = ({ setOpenUpdate, user }) => {
 		}
 	};
 
-	const handleChange = (e) => {
+	const handleChange = (e) =>
 		setTexts((prev) => ({ ...prev, [e.target.name]: [e.target.value] }));
-	};
 
 	const queryClient = useQueryClient();
 
@@ -38,10 +37,7 @@ const Update = ({ setOpenUpdate, user }) => {
 			return makeRequest.put('/users', user);
 		},
 		{
-			onSuccess: () => {
-				// Invalidate and refetch
-				queryClient.invalidateQueries(['user']);
-			},
+			onSuccess: () => queryClient.invalidateQueries(['user']),
 		}
 	);
 
